@@ -2,22 +2,22 @@ package step.learning;
 
 public class VarsAndTypes {
     public void run() {
-        System.out.println("vars and types");
-
-        boolean b = true;
-        byte bb = 120;
+        byte b = -120;
         short s = 12000;
-        int i = 12000000;
-        long l = 12000000L;
+        int i = 1200000;
+        long l = 12000000000L;
+        float f = 3.14f;
+        double d = 2.718281828459045;
+        char c = 'A';
+        boolean bool = true;
 
-        System.out.println(s + "");
-        float f = 100;
-        double d = 1.1e-7;
-        f = 1e3f;
-        Float f2 = f;
-        f2.toString();
-        char c = 'Ї';
-        Character cr = c;
-        cr.toString();
+        System.out.println("byte: " + b);
+        System.out.println("short: " + s);
+        System.out.println("int: " + i);
+        System.out.println("long: " + l);
+        System.out.println("float: " + f);
+        System.out.println("double: " + d);
+        System.out.println("char: " + c);
+        System.out.println("boolean: " + bool);
     }
 }
