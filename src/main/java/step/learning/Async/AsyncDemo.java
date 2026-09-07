@@ -24,7 +24,8 @@ public class AsyncDemo {
             } catch (InterruptedException ignore) {}
         }
 
-        System.out.println("Result string (mx): " + resultString);
+        String finalResult = resultString + ".jpg";
+        System.out.println("Result string (mx): " + finalResult);
     }
 
     class CharTask implements Runnable {
