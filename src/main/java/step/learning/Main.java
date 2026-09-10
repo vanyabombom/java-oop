@@ -1,10 +1,9 @@
 package step.learning;
-import step.learning.Async.AsyncDemo;
 
-import step.learning.OOPDemo.OOPDemo;
+import step.learning.Async.TaskDemo;
 
 public class Main {
-    static void main(String[] args) {
-        new AsyncDemo().run();
+    public static void main(String[] args) {
+        new TaskDemo().run();
     }
 }
