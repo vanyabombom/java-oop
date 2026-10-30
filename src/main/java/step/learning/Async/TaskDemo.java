@@ -13,16 +13,14 @@ import java.util.function.Supplier;
 
 public class TaskDemo {
 
-    private ExecutorService pool =
-            Executors.newFixedThreadPool(3);
+    private ExecutorService pool = Executors.newFixedThreadPool(3);
 
     public void run() {
         Callable<String> getHello = () -> {
             System.out.println("Task start sleeping");
             try {
                 Thread.sleep(500);
-            }
-            catch (InterruptedException ex) {
+            } catch (InterruptedException ex) {
                 System.out.println(ex.getMessage());
                 throw ex;
             }
@@ -34,8 +32,7 @@ public class TaskDemo {
         try {
             taskResult = task.get();
             System.out.println("Task got: " + taskResult);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Task caught: " + ex.getMessage());
         }
 
@@ -47,8 +44,7 @@ public class TaskDemo {
             pool.shutdown();
             pool.awaitTermination(100, TimeUnit.MILLISECONDS);
             pool.shutdownNow();
-        }
-        catch (InterruptedException ex) {
+        } catch (InterruptedException ex) {
             System.getLogger(TaskDemo.class.getName()).log(System.Logger.Level.ERROR, ex.getMessage());
         }
     }
@@ -57,8 +53,7 @@ public class TaskDemo {
         Supplier<String> supplier = () -> {
             try {
                 Thread.sleep(100);
-            }
-            catch (InterruptedException ex) {
+            } catch (InterruptedException ex) {
                 System.getLogger(TaskDemo.class.getName()).log(System.Logger.Level.ERROR, ex.getMessage());
             }
             return "Hello";
@@ -66,8 +61,7 @@ public class TaskDemo {
         Function<String, String> fn = (String s) -> {
             try {
                 Thread.sleep(100);
-            }
-            catch (InterruptedException ex) {
+            } catch (InterruptedException ex) {
                 System.getLogger(TaskDemo.class.getName()).log(System.Logger.Level.ERROR, ex.getMessage());
             }
             return s + " World";
@@ -77,18 +71,16 @@ public class TaskDemo {
             System.out.println(s);
         };
 
-        CompletableFuture chain =
-                CompletableFuture
-                        .supplyAsync(supplier, pool)
-                        .thenApply(fn)
-                        .thenApply(excl)
-                        .thenApply(excl)
-                        .thenAccept(action);
+        CompletableFuture chain = CompletableFuture
+                .supplyAsync(supplier, pool)
+                .thenApply(fn)
+                .thenApply(excl)
+                .thenApply(excl)
+                .thenAccept(action);
 
         try {
-            chain.get();    // очікування завершення усієї "нитки"
-        }
-        catch (ExecutionException | InterruptedException ex) {
+            chain.get(); // очікування завершення усієї "нитки"
+        } catch (ExecutionException | InterruptedException ex) {
             System.getLogger(TaskDemo.class.getName()).log(System.Logger.Level.ERROR, ex.getMessage());
         }
     }
@@ -96,25 +88,21 @@ public class TaskDemo {
     private void calcPercent() {
         Future[] tasks = new Future[12];
         for (int i = 1; i <= 12; ++i) {
-            tasks[i-1] = pool.submit(new Percent(i));
+            tasks[i - 1] = pool.submit(new Percent(i));
         }
         try {
             double sum = 100.0;
             for (int i = 1; i <= 12; ++i) {
-                double p = (double) tasks[i-1].get();
+                double p = (double) tasks[i - 1].get();
                 sum *= (1.0 + p / 100.0);
                 System.out.println("Task " + i + " got " + p +
-                        " sum = " + sum
-                );
+                        " sum = " + sum);
             }
-        }
-        catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             System.getLogger(TaskDemo.class.getName()).log(System.Logger.Level.ERROR, ex.getMessage());
         }
     }
 
-    // задача: виконати задачу "інфляція" з використанням
-    // ниток коду: одержання відсотка - коригування суми
     private void calcInflation() {
         double sum = 100.0;
         for (int i = 1; i <= 12; i++) {
@@ -122,8 +110,7 @@ public class TaskDemo {
             Supplier<Double> getPercent = () -> {
                 try {
                     return new Percent(month).call();
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     System.getLogger(TaskDemo.class.getName()).log(System.Logger.Level.ERROR, ex.getMessage());
                     return 0.0;
                 }
@@ -131,16 +118,14 @@ public class TaskDemo {
             final double prevSum = sum;
             Function<Double, Double> correctSum = (Double p) -> prevSum * (1.0 + p / 100.0);
 
-            CompletableFuture<Double> chain =
-                    CompletableFuture
-                            .supplyAsync(getPercent, pool)
-                            .thenApply(correctSum);
+            CompletableFuture<Double> chain = CompletableFuture
+                    .supplyAsync(getPercent, pool)
+                    .thenApply(correctSum);
 
             try {
                 sum = chain.get();
                 System.out.println("Month " + month + " sum = " + sum);
-            }
-            catch (InterruptedException | ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 System.getLogger(TaskDemo.class.getName()).log(System.Logger.Level.ERROR, ex.getMessage());
             }
         }
@@ -160,8 +145,7 @@ public class TaskDemo {
                 Thread.sleep(500);
                 System.out.println("Finish loading month " + month);
                 return 1.0 * month;
-            }
-            catch (InterruptedException ex) {
+            } catch (InterruptedException ex) {
                 System.out.println("Error loading month " + month);
                 throw ex;
             }
